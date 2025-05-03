@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction Results</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: pink;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+            text-align: center;
+            padding: 40px;
+        }
+
+        h2.success {
+            color: #00aa00;
+            text-shadow: 1px 1px 3px #fff;
+        }
+
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 90%;
+            background-color: rgba(255,255,255,0.95);
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #d10068;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #eee;
+        }
+
+        .fraud {
+            color: red;
+            font-weight: bold;
+        }
+
+        .not-fraud {
+            color: green;
+            font-weight: bold;
+        }
+
+        a.button {
+            display: inline-block;
+            margin: 20px 10px;
+            text-decoration: none;
+            color: white;
+            background: #d10068;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        #chart-container {
+            width: 400px;
+            margin: 30px auto;
+        }
+
+        footer {
+            background-color: #fff;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<main>
+    <h2 class="success">✔️ Predictions Generated Successfully!</h2>
+
+    <div id="chart-container">
+        <canvas id="fraudChart"></canvas>
+    </div>
+
+    <h2>Fraud Detection Results</h2>
+    {{ titles|safe }}
+    {{ tables|safe }}
+
+    <a class="button" href="/">🔁 Upload another file</a>
+    <a class="button" href="/download">⬇️ Download result.csv</a>
+</main>
+
+<footer>
+    <p>© Batch14 - Online Payment Fraud Detection</p>
+</footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const fraud = parseInt("{{ fraud_count }}");
+        const notFraud = parseInt("{{ not_fraud_count }}");
+
+        const ctx = document.getElementById('fraudChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Fraud', 'Not Fraud'],
+                datasets: [{
+                    label: 'Prediction Distribution',
+                    data: [fraud, notFraud],
+                    backgroundColor: ['#ff4c4c', '#4CAF50']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

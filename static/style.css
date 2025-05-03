@@ -1,0 +1,8 @@
+.fraud {
+    color: red !important;
+    font-weight: bold;
+}
+.not-fraud {
+    color: green !important;
+    font-weight: bold;
+}

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fraud Detection</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: pink;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+            text-align: center;
+            padding: 30px 20px 10px 20px;
+        }
+
+        h1 {
+            color: black;
+            text-shadow: 1px 1px 3px #fff;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin: 10px auto 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            width: 50%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            margin: 10px;
+            background-color: white;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        table {
+            margin: 10px auto 30px;
+            border-collapse: collapse;
+            width: 80%;
+            background-color: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #d10068;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .fraud {
+            color: red;
+            font-weight: bold;
+        }
+
+        .not-fraud {
+            color: green;
+            font-weight: bold;
+        }
+
+        footer {
+            background-color: black;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            color: white;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .legend span {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .legend .fraud-box {
+            width: 20px;
+            height: 12px;
+            background-color: red;
+            margin-right: 5px;
+        }
+
+        .legend .not-fraud-box {
+            width: 20px;
+            height: 12px;
+            background-color: green;
+            margin-right: 5px;
+        }
+
+        h2 {
+            margin: 20px 0 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Upload Test Dataset to Detect Fraud</h1>
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".csv" required><br>
+            <input type="submit" value="Predict">
+        </form>
+
+        {% if predictions %}
+        <div class="legend">
+            <span><div class="fraud-box"></div> Fraud</span>
+            <span><div class="not-fraud-box"></div> Not Fraud</span>
+        </div>
+
+        <h2>Fraud Detection Results</h2>
+        <p><strong>Fraud Prediction Table</strong></p>
+        <table>
+            <tr>
+                {% for col in columns %}
+                <th>{{ col }}</th>
+                {% endfor %}
+                <th>Prediction</th>
+            </tr>
+            {% for row, pred in data %}
+            <tr>
+                {% for item in row %}
+                <td>{{ item }}</td>
+                {% endfor %}
+                <td class="{{ 'fraud' if pred == 'Fraud' else 'not-fraud' }}">{{ pred }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>© Batch14 - Online Payment Fraud Detection</p>
+    </footer>
+</body>
+</html>
